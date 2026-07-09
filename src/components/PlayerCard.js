@@ -1,0 +1,82 @@
+'use client';
+
+import { useState } from 'react';
+
+export default function PlayerCard({ card, size = 'normal', onClick }) {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const sizeStyles = {
+    small: { width: '160px', height: '230px', fontSize: '0.7' },
+    normal: { width: '220px', height: '320px', fontSize: '1' },
+    large: { width: '280px', height: '400px', fontSize: '1.3' },
+  };
+
+  const s = sizeStyles[size] || sizeStyles.normal;
+  const scale = parseFloat(s.fontSize);
+
+  return (
+    <div
+      className={`player-card ${card.rarity}`}
+      style={{ width: s.width, height: s.height, cursor: onClick ? 'pointer' : 'default' }}
+      onClick={() => {
+        setIsFlipped(!isFlipped);
+        if (onClick) onClick(card);
+      }}
+    >
+      <div className="player-card-inner">
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%' }}>
+          <div>
+            <div className="player-card-rating" style={{ fontSize: `${2.8 * scale}rem` }}>
+              {card.rating}
+            </div>
+            <div className="player-card-position" style={{ fontSize: `${0.8 * scale}rem` }}>
+              {card.position}
+            </div>
+          </div>
+          <div style={{ fontSize: `${1.5 * scale}rem`, opacity: 0.7 }}>
+            {card.country}
+          </div>
+        </div>
+
+        <div className="player-card-icon-area" style={{
+          width: `${80 * scale}px`,
+          height: `${80 * scale}px`,
+          fontSize: `${2.5 * scale}rem`
+        }}>
+          {card.emoji}
+        </div>
+
+        <div className="player-card-name" style={{ fontSize: `${0.95 * scale}rem` }}>
+          {card.name}
+        </div>
+
+        <div className="player-card-stats">
+          <div className="player-card-stat">
+            <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.spd}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>SPD</div>
+          </div>
+          <div className="player-card-stat">
+            <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.pow}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>POW</div>
+          </div>
+          <div className="player-card-stat">
+            <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.def}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>DEF</div>
+          </div>
+          <div className="player-card-stat">
+            <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.pas}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>PAS</div>
+          </div>
+          <div className="player-card-stat">
+            <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.dri}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>DRI</div>
+          </div>
+          <div className="player-card-stat">
+            <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.sho}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>SHO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,171 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  getSavedGitHubStats,
+  getAvailablePacks,
+  getUniqueCards,
+  getUnlockedAchievements,
+} from '@/lib/gameEngine';
+import { achievements } from '@/data/players';
+
+export default function DashboardPage() {
+  const [stats, setStats] = useState(null);
+  const [packs, setPacks] = useState({});
+  const [uniqueCount, setUniqueCount] = useState(0);
+  const [unlockedCount, setUnlockedCount] = useState(0);
+  const router = useRouter();
+
+  useEffect(() => {
+    const savedStats = getSavedGitHubStats();
+    if (!savedStats) {
+      router.push('/');
+      return;
+    }
+    setStats(savedStats);
+    setPacks(getAvailablePacks());
+    setUniqueCount(getUniqueCards().length);
+    setUnlockedCount(getUnlockedAchievements().length);
+  }, [router]);
+
+  if (!stats) return null;
+
+  const totalPacks = Object.values(packs).reduce((s, v) => s + v, 0);
+
+  return (
+    <div className="container section">
+      {/* Profile Header */}
+      <div className="glass" style={{
+        padding: 'var(--space-xl)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--space-xl)',
+        marginBottom: 'var(--space-2xl)',
+        animation: 'fadeInUp 0.6s ease forwards',
+      }}>
+        <div style={{
+          width: '80px',
+          height: '80px',
+          borderRadius: 'var(--radius-full)',
+          overflow: 'hidden',
+          border: '3px solid var(--accent-primary)',
+          flexShrink: 0,
+        }}>
+          {stats.avatar && (
+            <img
+              src={stats.avatar}
+              alt={stats.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          )}
+        </div>
+        <div>
+          <h1 style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}>
+            {stats.name}
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+            @{stats.username} {stats.bio && `• ${stats.bio}`}
+          </p>
+        </div>
+      </div>
+
+      {/* GitHub Stats Grid */}
+      <div className="section-header" style={{ textAlign: 'left', marginBottom: 'var(--space-lg)' }}>
+        <h2>Developer <span className="gradient-text">Time Machine</span> 📈</h2>
+      </div>
+
+      <div className="stats-grid" style={{ marginBottom: 'var(--space-2xl)' }}>
+        {[
+          { value: stats.totalCommits, label: 'Total Commits', color: 'var(--accent-primary)' },
+          { value: stats.publicRepos, label: 'Public Repos', color: 'var(--accent-secondary)' },
+          { value: stats.totalStars, label: 'Stars Earned', color: 'var(--accent-gold)' },
+          { value: stats.followers, label: 'Followers', color: 'var(--accent-rare)' },
+        ].map((stat, i) => (
+          <div
+            key={i}
+            className="card stat-card animate-fade-in"
+            style={{ animationDelay: `${i * 0.1}s`, opacity: 0 }}
+          >
+            <div className="stat-value" style={{ color: stat.color }}>{stat.value}</div>
+            <div className="stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Top Languages */}
+      {stats.topLanguages && stats.topLanguages.length > 0 && (
+        <div className="card animate-fade-in animate-delay-2" style={{ marginBottom: 'var(--space-2xl)' }}>
+          <h3 style={{ marginBottom: 'var(--space-lg)', fontSize: '1.2rem' }}>
+            🔥 Top Languages
+          </h3>
+          <div style={{ display: 'flex', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
+            {stats.topLanguages.map((lang, i) => (
+              <div
+                key={lang.lang}
+                style={{
+                  padding: 'var(--space-sm) var(--space-md)',
+                  background: 'var(--bg-glass-light)',
+                  border: '1px solid var(--border-glass)',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  color: 'var(--text-primary)',
+                }}
+              >
+                {lang.lang} <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>({lang.count})</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Quick Actions */}
+      <div className="section-header" style={{ textAlign: 'left', marginBottom: 'var(--space-lg)' }}>
+        <h2>Quick <span className="gradient-text-gold">Actions</span></h2>
+      </div>
+
+      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
+        <div
+          className="card animate-fade-in animate-delay-3"
+          style={{ cursor: 'pointer', textAlign: 'center' }}
+          onClick={() => router.push('/packs')}
+        >
+          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-sm)' }}>📦</div>
+          <h3 style={{ fontSize: '1.1rem' }}>Open Packs</h3>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+            {totalPacks > 0 ? (
+              <span style={{ color: 'var(--accent-gold)' }}>{totalPacks} packs available!</span>
+            ) : (
+              'No packs available yet'
+            )}
+          </p>
+        </div>
+
+        <div
+          className="card animate-fade-in animate-delay-4"
+          style={{ cursor: 'pointer', textAlign: 'center' }}
+          onClick={() => router.push('/collection')}
+        >
+          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-sm)' }}>🃏</div>
+          <h3 style={{ fontSize: '1.1rem' }}>My Collection</h3>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+            {uniqueCount} / 58 cards collected
+          </p>
+        </div>
+
+        <div
+          className="card animate-fade-in"
+          style={{ cursor: 'pointer', textAlign: 'center', animationDelay: '0.5s', opacity: 0 }}
+          onClick={() => router.push('/achievements')}
+        >
+          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-sm)' }}>🏆</div>
+          <h3 style={{ fontSize: '1.1rem' }}>Achievements</h3>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+            {unlockedCount} / {achievements.length} unlocked
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
