@@ -1,5 +1,34 @@
 // Player/Card database for the Developer Pack Simulator
 // Real footballers across all rarity tiers
+// Player images: add real headshots to /public/players/{slug}.png to display them
+
+// Helper to generate a slug from player name for image path
+export function getPlayerSlug(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Generate a fallback image URL using player initials
+export function getPlayerImageUrl(player) {
+  const slug = getPlayerSlug(player.name);
+  // First try local image, component will fallback to initials if it fails
+  return `/players/${slug}.png`;
+}
+
+// Initials-based fallback (used when local image doesn't exist)
+const rarityBgColors = {
+  bronze: '8B6914',
+  silver: '808080',
+  gold: 'C5A000',
+  rare: 'C0392B',
+  'ultra-rare': 'C2185B',
+  icon: '00838F',
+};
+
+export function getPlayerFallbackUrl(player) {
+  const bg = rarityBgColors[player.rarity] || '333333';
+  const initials = player.name.split(' ').map(w => w[0]).join('').slice(0, 2);
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=${bg}&color=fff&size=200&bold=true&font-size=0.4`;
+}
 
 const players = [
   // === BRONZE CARDS (Rating 50-64) ===

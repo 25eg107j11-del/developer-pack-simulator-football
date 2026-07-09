@@ -10,6 +10,7 @@ const STORAGE_KEYS = {
   GITHUB_USER: 'dps_github_user',
   GITHUB_STATS: 'dps_github_stats',
   FIRST_LOGIN: 'dps_first_login',
+  LINEUP: 'dps_lineup',
 };
 
 // ========== STORAGE HELPERS ==========
@@ -62,6 +63,27 @@ export function getDuplicates() {
       card: collection.find(c => c.id === Number(id)),
       count,
     }));
+}
+
+// ========== LINEUP ==========
+export function getLineup() {
+  return getStorage(STORAGE_KEYS.LINEUP, {
+    GK: null,
+    LB: null,
+    CB1: null,
+    CB2: null,
+    RB: null,
+    CM1: null,
+    CM2: null,
+    CAM: null,
+    LW: null,
+    ST: null,
+    RW: null,
+  });
+}
+
+export function saveLineup(lineup) {
+  setStorage(STORAGE_KEYS.LINEUP, lineup);
 }
 
 // ========== PACKS ==========

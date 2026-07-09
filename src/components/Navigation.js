@@ -11,6 +11,7 @@ export default function Navigation() {
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/packs', label: 'Packs', icon: '📦' },
     { href: '/collection', label: 'Collection', icon: '🃏' },
+    { href: '/lineup', label: 'Lineup', icon: '📋' },
     { href: '/achievements', label: 'Achievements', icon: '🏆' },
   ];
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getPlayerImageUrl, getPlayerFallbackUrl } from '@/data/players';
 
 export default function PlayerCard({ card, size = 'normal', onClick }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -39,11 +40,33 @@ export default function PlayerCard({ card, size = 'normal', onClick }) {
         </div>
 
         <div className="player-card-icon-area" style={{
-          width: `${80 * scale}px`,
-          height: `${80 * scale}px`,
-          fontSize: `${2.5 * scale}rem`
+          width: `${100 * scale}px`,
+          height: `${100 * scale}px`,
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: '50%',
+          border: '2px solid rgba(255, 255, 255, 0.2)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'var(--bg-glass-heavy)'
         }}>
-          {card.emoji}
+          <img 
+            src={getPlayerImageUrl(card)} 
+            alt={card.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onError={(e) => {
+              if (e.target.src !== getPlayerFallbackUrl(card)) {
+                e.target.src = getPlayerFallbackUrl(card);
+              } else {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+              }
+            }}
+          />
+          <div style={{ display: 'none', fontSize: `${2.5 * scale}rem` }}>
+            {card.emoji}
+          </div>
         </div>
 
         <div className="player-card-name" style={{ fontSize: `${0.95 * scale}rem` }}>

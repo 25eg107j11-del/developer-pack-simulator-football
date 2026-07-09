@@ -17,6 +17,7 @@ export default function CollectionPage() {
   const [uniqueCards, setUniqueCards] = useState([]);
   const [duplicates, setDuplicates] = useState([]);
   const [filterRarity, setFilterRarity] = useState('all');
+  const [selectedCard, setSelectedCard] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -119,7 +120,7 @@ export default function CollectionPage() {
                 justifyContent: 'center',
               }}
             >
-              <PlayerCard card={card} size="small" />
+              <PlayerCard card={card} size="small" onClick={(c) => setSelectedCard(c)} />
               {tab === 'duplicates' && (
                 <div style={{
                   position: 'absolute',
@@ -137,6 +138,43 @@ export default function CollectionPage() {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Card Zoom Modal */}
+      {selectedCard && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            zIndex: 1000,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(10px)',
+            cursor: 'pointer',
+          }}
+          onClick={() => setSelectedCard(null)}
+        >
+          <div 
+            className="animate-fade-in" 
+            style={{ transform: 'scale(1.2)' }}
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking the card itself
+          >
+            <PlayerCard card={selectedCard} size="large" />
+          </div>
+          <button 
+            className="btn btn-outline" 
+            style={{ marginTop: '2rem', borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}
+            onClick={() => setSelectedCard(null)}
+          >
+            Close
+          </button>
         </div>
       )}
     </div>
