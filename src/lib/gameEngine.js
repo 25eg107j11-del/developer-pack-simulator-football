@@ -276,9 +276,9 @@ export async function fetchGitHubStats(username) {
       : [];
     const totalCommitsFromEvents = pushEvents.reduce((sum, e) => sum + (e.payload?.commits?.length || 0), 0);
 
-    // Estimate total commits from repos
+    // Estimate total commits: public events + baseline based on repos
     const totalRepos = userData.public_repos || 0;
-    const estimatedTotalCommits = Math.max(totalCommitsFromEvents, totalRepos * 10);
+    const estimatedTotalCommits = totalCommitsFromEvents + (totalRepos * 10);
 
     const stats = {
       username: userData.login,

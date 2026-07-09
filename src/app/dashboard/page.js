@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   getSavedGitHubStats,
+  fetchGitHubStats,
+  checkAchievements,
   getAvailablePacks,
   getUniqueCards,
   getUnlockedAchievements,
@@ -23,10 +25,19 @@ export default function DashboardPage() {
       router.push('/');
       return;
     }
+    // Load cached data immediately
     setStats(savedStats);
     setPacks(getAvailablePacks());
     setUniqueCount(getUniqueCards().length);
     setUnlockedCount(getUnlockedAchievements().length);
+
+    // Fetch fresh stats in background
+    fetchGitHubStats(savedStats.username).then(freshStats => {
+      checkAchievements(freshStats);
+      setStats(freshStats);
+      setPacks(getAvailablePacks());
+      setUnlockedCount(getUnlockedAchievements().length);
+    }).catch(console.error);
   }, [router]);
 
   if (!stats) return null;
