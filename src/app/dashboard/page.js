@@ -33,12 +33,6 @@ export default function DashboardPage() {
 
     // Fetch fresh stats in background
     fetchGitHubStats(savedStats.username).then(freshStats => {
-      // Overwrite fresh stats with any simulated commits if they exist in local storage to preserve dev testing
-      const currentStats = JSON.parse(localStorage.getItem('dps_github_stats'));
-      if (currentStats && currentStats.totalCommits > freshStats.totalCommits) {
-        freshStats.totalCommits = currentStats.totalCommits;
-      }
-      
       checkAchievements(freshStats);
       setStats(freshStats);
       setPacks(getAvailablePacks());

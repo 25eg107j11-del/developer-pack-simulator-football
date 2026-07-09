@@ -11,6 +11,7 @@ const STORAGE_KEYS = {
   GITHUB_STATS: 'dps_github_stats',
   FIRST_LOGIN: 'dps_first_login',
   LINEUP: 'dps_lineup',
+  MILESTONES: 'dps_commit_milestones',
 };
 
 // ========== STORAGE HELPERS ==========
@@ -228,6 +229,21 @@ export function checkAchievements(githubStats) {
     if (totalCommits >= 15 && unlockAchievement('fifteen_commits')) {
       newlyUnlocked.push(achievements.find(a => a.id === 'fifteen_commits'));
     }
+
+    // Repeatable Milestone: 1 Gold Pack per 10 commits
+    const milestonesClaimed = getStorage(STORAGE_KEYS.MILESTONES, 0);
+    const milestonesEarned = Math.floor(totalCommits / 10);
+    
+    if (milestonesEarned > milestonesClaimed) {
+      const newPacksToGive = milestonesEarned - milestonesClaimed;
+      addPack('gold', newPacksToGive);
+      setStorage(STORAGE_KEYS.MILESTONES, milestonesEarned);
+      newlyUnlocked.push({ 
+        name: `🔥 ${newPacksToGive * 10} Commit Milestone!`, 
+        description: `You reached a new commit milestone and earned ${newPacksToGive} Gold Pack(s)!`, 
+        reward: 'gold' 
+      });
+    }
   }
 
   // Collection-based
@@ -278,7 +294,13 @@ export async function fetchGitHubStats(username) {
 
     // Estimate total commits: public events + baseline based on repos
     const totalRepos = userData.public_repos || 0;
-    const estimatedTotalCommits = totalCommitsFromEvents + (totalRepos * 10);
+    let estimatedTotalCommits = totalCommitsFromEvents + (totalRepos * 10);
+    
+    // Prevent GitHub API caching from downgrading the commit count
+    const existingStats = getSavedGitHubStats();
+    if (existingStats && existingStats.totalCommits > estimatedTotalCommits) {
+      estimatedTotalCommits = existingStats.totalCommits;
+    }
 
     const stats = {
       username: userData.login,
