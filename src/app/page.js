@@ -8,6 +8,7 @@ import {
   getSavedGitHubStats,
   checkAchievements,
   getAvailablePacks,
+  logout,
 } from '@/lib/gameEngine';
 
 export default function Home() {
@@ -73,7 +74,10 @@ export default function Home() {
               </button>
               <button
                 className="btn btn-outline btn-lg"
-                onClick={() => setSavedUser(null)}
+                onClick={() => {
+                  logout();
+                  setSavedUser(null);
+                }}
               >
                 Switch Account
               </button>

@@ -272,6 +272,13 @@ export function saveGitHubData(username, stats) {
   setStorage(STORAGE_KEYS.GITHUB_STATS, stats);
 }
 
+export function logout() {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(STORAGE_KEYS.GITHUB_USER);
+    localStorage.removeItem(STORAGE_KEYS.GITHUB_STATS);
+  }
+}
+
 export async function fetchGitHubStats(username) {
   try {
     // Fetch user profile
