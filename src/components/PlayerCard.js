@@ -57,7 +57,7 @@ export default function PlayerCard({ card, size = 'normal', onClick }) {
           </div>
           <div className="player-card-stat">
             <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.pow}</div>
-            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>POW</div>
+            <div className="player-card-stat-label" style={{ fontSize: `${0.55 * scale}rem` }}>PHY</div>
           </div>
           <div className="player-card-stat">
             <div className="player-card-stat-value" style={{ fontSize: `${0.85 * scale}rem` }}>{card.stats.def}</div>
