@@ -33,12 +33,27 @@ export default function DashboardPage() {
 
     // Fetch fresh stats in background
     fetchGitHubStats(savedStats.username).then(freshStats => {
+      // Overwrite fresh stats with any simulated commits if they exist in local storage to preserve dev testing
+      const currentStats = JSON.parse(localStorage.getItem('dps_github_stats'));
+      if (currentStats && currentStats.totalCommits > freshStats.totalCommits) {
+        freshStats.totalCommits = currentStats.totalCommits;
+      }
+      
       checkAchievements(freshStats);
       setStats(freshStats);
       setPacks(getAvailablePacks());
       setUnlockedCount(getUnlockedAchievements().length);
     }).catch(console.error);
   }, [router]);
+
+  const simulateCommits = () => {
+    const newStats = { ...stats, totalCommits: (stats.totalCommits || 0) + 5 };
+    localStorage.setItem('dps_github_stats', JSON.stringify(newStats));
+    checkAchievements(newStats);
+    setStats(newStats);
+    setPacks(getAvailablePacks());
+    setUnlockedCount(getUnlockedAchievements().length);
+  };
 
   if (!stats) return null;
 
@@ -176,6 +191,16 @@ export default function DashboardPage() {
             {unlockedCount} / {achievements.length} unlocked
           </p>
         </div>
+      </div>
+
+      {/* Dev Tools */}
+      <div style={{ marginTop: '3rem', padding: '1rem', border: '1px dashed var(--accent-rare)', borderRadius: '12px', textAlign: 'center' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>
+          <strong>Dev Testing:</strong> GitHub's API can take ~5 minutes to register new commits. Use this to instantly test achievement triggers!
+        </p>
+        <button className="btn btn-outline" onClick={simulateCommits} style={{ borderColor: 'var(--accent-rare)', color: 'var(--accent-rare)' }}>
+          + Simulate 5 Commits
+        </button>
       </div>
     </div>
   );
