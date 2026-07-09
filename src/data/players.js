@@ -9,9 +9,8 @@ export function getPlayerSlug(name) {
 
 // Generate a fallback image URL using player initials
 export function getPlayerImageUrl(player) {
-  const slug = getPlayerSlug(player.name);
-  // First try local image, component will fallback to initials if it fails
-  return `/players/${slug}.png`;
+  const prompt = `anime style portrait of ${player.name} football player, highly detailed, expressive, masterpiece`;
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=256&height=256&nologo=true&seed=${player.id * 1337}`;
 }
 
 // Initials-based fallback (used when local image doesn't exist)
