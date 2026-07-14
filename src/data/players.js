@@ -7,10 +7,19 @@ export function getPlayerSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 }
 
-// Generate a fallback image URL using player initials
+// Generate a clean initials-based image (no AI art)
+const rarityImageBg = {
+  bronze: '8B6914',
+  silver: '6B7280',
+  gold: 'B8860B',
+  rare: 'B91C1C',
+  'ultra-rare': '9333EA',
+  icon: '0E7490',
+};
+
 export function getPlayerImageUrl(player) {
-  const prompt = `anime style portrait of ${player.name} football player, highly detailed, expressive, masterpiece`;
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=256&height=256&nologo=true&seed=${player.id * 1337}`;
+  const bg = rarityImageBg[player.rarity] || '333333';
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=${bg}&color=fff&size=256&bold=true&font-size=0.35`;
 }
 
 // Initials-based fallback (used when local image doesn't exist)
