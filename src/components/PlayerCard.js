@@ -1,10 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { getPlayerImageUrl, getPlayerFallbackUrl } from '@/data/players';
+import players, { getPlayerImageUrl, getPlayerFallbackUrl } from '@/data/players';
 
-export default function PlayerCard({ card, size = 'normal', onClick }) {
+export default function PlayerCard({ card: initialCard, size = 'normal', onClick }) {
   const [isFlipped, setIsFlipped] = useState(false);
+
+  // Always use the latest data from the master list so old local storage saves 
+  // (like old emoji flags) get updated to new formats (like ISO codes).
+  const card = players.find(p => p.id === initialCard.id) || initialCard;
 
   const sizeStyles = {
     small: { width: '160px', height: '230px', fontSize: '0.7' },
