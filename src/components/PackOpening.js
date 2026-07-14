@@ -4,24 +4,23 @@ import { useState, useEffect, useCallback } from 'react';
 import PlayerCard from './PlayerCard';
 
 const rarityColors = {
-  bronze: '#cd7f32',
-  silver: '#c0c0c0',
-  gold: '#ffd700',
-  rare: '#e17055',
-  'ultra-rare': '#fd79a8',
-  icon: '#00cec9',
+  bronze: '#a0763b',
+  silver: '#9ca3af',
+  gold: '#daa520',
+  rare: '#dc2626',
+  'ultra-rare': '#9333ea',
+  icon: '#0e7490',
 };
 
-const rarityFlareGradients = {
-  bronze: 'radial-gradient(circle, rgba(205,127,50,0.3) 0%, transparent 70%)',
-  silver: 'radial-gradient(circle, rgba(192,192,192,0.3) 0%, transparent 70%)',
-  gold: 'radial-gradient(circle, rgba(255,215,0,0.4) 0%, transparent 70%)',
-  rare: 'radial-gradient(circle, rgba(225,112,85,0.4) 0%, transparent 70%)',
-  'ultra-rare': 'radial-gradient(circle, rgba(253,121,168,0.4) 0%, transparent 70%)',
-  icon: 'radial-gradient(circle, rgba(0,206,201,0.4) 0%, rgba(108,92,231,0.3) 50%, transparent 70%)',
+const rarityGlowColors = {
+  bronze: 'rgba(160, 118, 59, 0.5)',
+  silver: 'rgba(156, 163, 175, 0.5)',
+  gold: 'rgba(218, 165, 32, 0.6)',
+  rare: 'rgba(220, 38, 38, 0.6)',
+  'ultra-rare': 'rgba(147, 51, 234, 0.6)',
+  icon: 'rgba(14, 116, 144, 0.6)',
 };
 
-// Phases: shake -> reveal -> walkout (if rare+) -> show cards
 const PHASES = {
   SHAKE: 'shake',
   BURST: 'burst',
@@ -33,13 +32,22 @@ export default function PackOpening({ cards, packType, onClose }) {
   const [phase, setPhase] = useState(PHASES.SHAKE);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [revealedCards, setRevealedCards] = useState([]);
+  const [shakeIntensity, setShakeIntensity] = useState(1);
 
-  // Find the best card for walkout
   const rarityOrder = ['bronze', 'silver', 'gold', 'rare', 'ultra-rare', 'icon'];
   const bestCard = cards.reduce((best, card) =>
     rarityOrder.indexOf(card.rarity) > rarityOrder.indexOf(best.rarity) ? card : best
   , cards[0]);
   const isWalkout = rarityOrder.indexOf(bestCard.rarity) >= rarityOrder.indexOf('rare');
+
+  // Escalating shake intensity
+  useEffect(() => {
+    if (phase !== PHASES.SHAKE) return;
+    const interval = setInterval(() => {
+      setShakeIntensity(prev => Math.min(prev + 0.4, 3));
+    }, 400);
+    return () => clearInterval(interval);
+  }, [phase]);
 
   const advancePhase = useCallback(() => {
     if (phase === PHASES.SHAKE) {
@@ -55,25 +63,23 @@ export default function PackOpening({ cards, packType, onClose }) {
     }
   }, [phase, isWalkout]);
 
-  // Auto-advance phases
   useEffect(() => {
     let timer;
     if (phase === PHASES.SHAKE) {
-      timer = setTimeout(advancePhase, 2000);
+      timer = setTimeout(advancePhase, 2200);
     } else if (phase === PHASES.BURST) {
-      timer = setTimeout(advancePhase, 1500);
+      timer = setTimeout(advancePhase, 1800);
     } else if (phase === PHASES.WALKOUT) {
-      timer = setTimeout(advancePhase, 3500);
+      timer = setTimeout(advancePhase, 4000);
     }
     return () => clearTimeout(timer);
   }, [phase, advancePhase]);
 
-  // Reveal cards one by one
   useEffect(() => {
     if (phase === PHASES.CARDS && revealedCards.length < cards.length) {
       const timer = setTimeout(() => {
         setRevealedCards(prev => [...prev, cards[prev.length]]);
-      }, 400);
+      }, 350);
       return () => clearTimeout(timer);
     }
   }, [phase, revealedCards, cards]);
@@ -83,10 +89,13 @@ export default function PackOpening({ cards, packType, onClose }) {
     setRevealedCards([...cards]);
   };
 
+  const accentColor = rarityColors[bestCard.rarity] || '#6c5ce7';
+  const glowColor = rarityGlowColors[bestCard.rarity] || 'rgba(108, 92, 231, 0.5)';
+
   return (
     <div className="pack-overlay" onClick={phase === PHASES.CARDS && revealedCards.length === cards.length ? onClose : undefined}>
 
-      {/* SHAKE PHASE */}
+      {/* ── SHAKE PHASE ── */}
       {phase === PHASES.SHAKE && (
         <div style={{
           display: 'flex',
@@ -94,38 +103,83 @@ export default function PackOpening({ cards, packType, onClose }) {
           alignItems: 'center',
           gap: '2rem',
         }}>
+          {/* Styled pack element */}
           <div style={{
-            fontSize: '8rem',
-            animation: 'packShake 0.3s ease-in-out infinite',
-            filter: `drop-shadow(0 0 30px ${rarityColors[packType] || '#6c5ce7'})`,
+            width: '140px',
+            height: '200px',
+            borderRadius: '6px',
+            background: `linear-gradient(160deg, ${accentColor}22, ${accentColor}44, ${accentColor}22)`,
+            border: `1px solid ${accentColor}66`,
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            animation: `packShake ${0.3 / shakeIntensity}s ease-in-out infinite`,
+            boxShadow: `0 0 ${30 * shakeIntensity}px ${glowColor}, inset 0 0 30px ${accentColor}11`,
           }}>
-            📦
+            {/* Foil seam */}
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '10%',
+              right: '10%',
+              height: '2px',
+              background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
+              opacity: 0.6 + (shakeIntensity * 0.13),
+              boxShadow: `0 0 ${8 * shakeIntensity}px ${accentColor}`,
+            }} />
+            {/* Pack label */}
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '0.2em',
+              color: accentColor,
+              position: 'absolute',
+              top: '25%',
+              opacity: 0.7,
+            }}>
+              {packType.replace('-', ' ')}
+            </div>
+            {/* Corner accents */}
+            <div style={{
+              position: 'absolute', top: '8px', left: '8px', width: '16px', height: '16px',
+              borderTop: `2px solid ${accentColor}66`, borderLeft: `2px solid ${accentColor}66`,
+            }} />
+            <div style={{
+              position: 'absolute', bottom: '8px', right: '8px', width: '16px', height: '16px',
+              borderBottom: `2px solid ${accentColor}66`, borderRight: `2px solid ${accentColor}66`,
+            }} />
           </div>
+
           <p style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '1.2rem',
-            color: 'var(--text-secondary)',
-            letterSpacing: '0.15em',
+            fontSize: '0.85rem',
+            color: 'var(--text-muted)',
+            letterSpacing: '0.25em',
             textTransform: 'uppercase',
-            animation: 'pulse 1s ease-in-out infinite',
+            animation: 'pulse 1.2s ease-in-out infinite',
           }}>
-            Pack Opening...
+            Opening Pack
           </p>
-          <button className="walkout-skip" onClick={skipToCards}>
-            Click to skip →
+
+          <button className="walkout-skip" onClick={skipToCards} style={{ position: 'relative', bottom: 'auto' }}>
+            Skip
           </button>
+
           <style jsx>{`
             @keyframes packShake {
-              0%, 100% { transform: rotate(-3deg) scale(1); }
-              25% { transform: rotate(3deg) scale(1.05); }
-              50% { transform: rotate(-3deg) scale(1.1); }
-              75% { transform: rotate(3deg) scale(1.05); }
+              0%, 100% { transform: rotate(${-1.5 * shakeIntensity}deg) scale(1); }
+              25% { transform: rotate(${1.5 * shakeIntensity}deg) scale(${1 + 0.02 * shakeIntensity}); }
+              50% { transform: rotate(${-1.5 * shakeIntensity}deg) scale(${1 + 0.04 * shakeIntensity}); }
+              75% { transform: rotate(${1.5 * shakeIntensity}deg) scale(${1 + 0.02 * shakeIntensity}); }
             }
           `}</style>
         </div>
       )}
 
-      {/* BURST PHASE */}
+      {/* ── BURST PHASE ── */}
       {phase === PHASES.BURST && (
         <div style={{
           display: 'flex',
@@ -133,55 +187,94 @@ export default function PackOpening({ cards, packType, onClose }) {
           justifyContent: 'center',
           width: '100%',
           height: '100%',
-          background: rarityFlareGradients[bestCard.rarity],
-          animation: 'burstIn 0.5s ease forwards',
+          position: 'relative',
+          overflow: 'hidden',
         }}>
+          {/* Central flash */}
           <div style={{
-            fontSize: '12rem',
+            position: 'absolute',
+            width: '100vw',
+            height: '100vh',
+            background: `radial-gradient(circle at center, ${accentColor}30 0%, transparent 60%)`,
+            animation: 'lightRayBurst 1.5s ease forwards',
+          }} />
+
+          {/* Radiating lines */}
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: '2px',
+              height: '80vh',
+              background: `linear-gradient(180deg, ${accentColor}40, transparent)`,
+              transformOrigin: 'top center',
+              transform: `translate(-50%, 0) rotate(${i * 30}deg)`,
+              animation: `burstLineIn 1s ease forwards`,
+              animationDelay: `${i * 0.03}s`,
+              opacity: 0,
+            }} />
+          ))}
+
+          {/* Glow orb */}
+          <div style={{
+            width: '120px',
+            height: '120px',
+            borderRadius: '50%',
+            background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)`,
             animation: 'scaleIn 0.5s ease forwards',
-            filter: `drop-shadow(0 0 60px ${rarityColors[bestCard.rarity]})`,
-          }}>
-            ✨
-          </div>
+            filter: `blur(20px)`,
+            position: 'relative',
+            zIndex: 2,
+          }} />
+
           <button className="walkout-skip" onClick={skipToCards}>
-            Click to skip →
+            Skip
           </button>
+
           <style jsx>{`
-            @keyframes burstIn {
-              from { opacity: 0; }
-              to { opacity: 1; }
+            @keyframes burstLineIn {
+              from { opacity: 0; height: 0; }
+              to { opacity: 0.6; height: 80vh; }
             }
           `}</style>
         </div>
       )}
 
-      {/* WALKOUT PHASE */}
+      {/* ── WALKOUT PHASE ── */}
       {phase === PHASES.WALKOUT && (
-        <div className="walkout-stage" style={{
-          background: rarityFlareGradients[bestCard.rarity],
-        }}>
+        <div className="walkout-stage">
+          {/* Colored ambient glow */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: `radial-gradient(ellipse at center, ${accentColor}15 0%, transparent 70%)`,
+            pointerEvents: 'none',
+          }} />
+
           <div className="walkout-country">{bestCard.country}</div>
           <div className="walkout-position">{bestCard.position}</div>
-          <div className="walkout-text">🔥 WALKOUT</div>
-          <div className="walkout-rating" style={{ color: rarityColors[bestCard.rarity] }}>
+          <div className="walkout-text">WALKOUT</div>
+          <div className="walkout-rating" style={{ color: accentColor }}>
             {bestCard.rating}
           </div>
-          <div className="walkout-name" style={{ color: rarityColors[bestCard.rarity] }}>
+          <div className="walkout-name" style={{ color: accentColor }}>
             {bestCard.name}
           </div>
+
           <button className="walkout-skip" onClick={skipToCards}>
-            Click to skip →
+            Skip
           </button>
         </div>
       )}
 
-      {/* CARDS PHASE */}
+      {/* ── CARDS PHASE ── */}
       {phase === PHASES.CARDS && (
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '2rem',
+          gap: '1.5rem',
           padding: '2rem',
           width: '100%',
           maxHeight: '100vh',
@@ -189,27 +282,30 @@ export default function PackOpening({ cards, packType, onClose }) {
         }}>
           <h2 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '1.5rem',
-            color: 'var(--text-secondary)',
+            fontSize: '0.85rem',
+            color: 'var(--text-muted)',
             textTransform: 'uppercase',
-            letterSpacing: '0.1em',
+            letterSpacing: '0.25em',
+            fontWeight: 700,
             animation: 'fadeInUp 0.5s ease forwards',
           }}>
             Pack Contents
           </h2>
+
           <div style={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '1.5rem',
+            gap: '1.2rem',
             justifyContent: 'center',
             alignItems: 'center',
+            perspective: '1000px',
           }}>
             {revealedCards.map((card, i) => (
               <div
                 key={`${card.id}-${i}`}
                 style={{
-                  animation: `scaleIn 0.4s ease forwards`,
-                  animationDelay: `${i * 0.1}s`,
+                  animation: `cardDealIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`,
+                  animationDelay: `${i * 0.12}s`,
                   opacity: 0,
                 }}
               >
@@ -217,13 +313,20 @@ export default function PackOpening({ cards, packType, onClose }) {
               </div>
             ))}
           </div>
+
           {revealedCards.length === cards.length && (
             <button
               className="btn btn-primary btn-lg"
               onClick={onClose}
-              style={{ animation: 'fadeInUp 0.5s ease forwards', animationDelay: '0.5s', opacity: 0 }}
+              style={{
+                animation: 'fadeInUp 0.5s ease forwards',
+                animationDelay: '0.6s',
+                opacity: 0,
+                letterSpacing: '0.05em',
+                marginTop: '0.5rem',
+              }}
             >
-              Done ✓
+              Continue
             </button>
           )}
         </div>
