@@ -1,5 +1,7 @@
 # Football Pack Simulator
 
+**👉 [Play the Live Demo](https://developer-pack-simulator-football.vercel.app/)**
+
 A fun little web app I built to simulate opening football (soccer) card packs. It's got the whole pack animation sequence: shaking, bursting, and even walkouts for the rare ones! Built this mainly to play around with React and some neat CSS animations.
 
 ## Features
