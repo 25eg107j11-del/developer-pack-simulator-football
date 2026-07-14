@@ -69,7 +69,7 @@ export default function LineupPage() {
   return (
     <div className="container section">
       <div className="section-header">
-        <h1>My <span className="gradient-text">Lineup</span> ⚽</h1>
+        <h1>My <span className="gradient-text">Lineup</span></h1>
         <p>Build your Ultimate Developer XI</p>
       </div>
 

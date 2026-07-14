@@ -46,7 +46,7 @@ export default function CollectionPage() {
   return (
     <div className="container section">
       <div className="section-header">
-        <h1>My <span className="gradient-text">Collection</span> 🃏</h1>
+        <h1>My <span className="gradient-text">Collection</span></h1>
         <p>{uniqueCards.length} / {players.length} unique cards collected ({collection.length} total)</p>
       </div>
 
@@ -96,7 +96,7 @@ export default function CollectionPage() {
       {/* Cards Grid */}
       {filteredCards.length === 0 ? (
         <div className="empty-state animate-fade-in">
-          <div className="empty-state-icon">🃏</div>
+          <div className="empty-state-icon" style={{ fontSize: '2rem', opacity: 0.3 }}>—</div>
           <h3>No cards yet</h3>
           <p style={{ maxWidth: '400px', margin: '0.5rem auto 1.5rem', fontSize: '0.9rem' }}>
             {tab === 'duplicates'

@@ -49,7 +49,7 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero-badge animate-fade-in">
-          ⚽ Developer Time Machine × FIFA Pack Simulator
+          Developer Time Machine × Football Pack Simulator
         </div>
 
         <h1 className="animate-fade-in animate-delay-1">
@@ -70,7 +70,7 @@ export default function Home() {
             </p>
             <div className="hero-actions">
               <button className="btn btn-primary btn-lg" onClick={handleContinue}>
-                ⚡ Continue to Dashboard
+                Continue to Dashboard
               </button>
               <button
                 className="btn btn-outline btn-lg"
@@ -105,7 +105,7 @@ export default function Home() {
                   {loading ? (
                     <span className="loading-spinner" />
                   ) : (
-                    '🔗 Connect'
+                    '→ Connect'
                   )}
                 </button>
               </div>
@@ -129,17 +129,24 @@ export default function Home() {
 
           <div className="stats-grid" style={{ maxWidth: '900px', margin: '0 auto' }}>
             {[
-              { icon: '🔗', title: 'Connect GitHub', desc: 'Link your account to fetch your coding stats' },
-              { icon: '🏆', title: 'Earn Achievements', desc: 'Commits, streaks, and contributions unlock rewards' },
-              { icon: '📦', title: 'Open Packs', desc: 'Dramatic animations reveal your developer cards' },
-              { icon: '🃏', title: 'Build Collection', desc: 'Collect all 58 cards from Bronze to Icon rarity' },
+              { icon: '01', title: 'Connect GitHub', desc: 'Link your account to fetch your coding stats' },
+              { icon: '02', title: 'Earn Achievements', desc: 'Commits, streaks, and contributions unlock rewards' },
+              { icon: '03', title: 'Open Packs', desc: 'Dramatic animations reveal your football cards' },
+              { icon: '04', title: 'Build Collection', desc: 'Collect all 58 cards from Bronze to Icon rarity' },
             ].map((feature, i) => (
               <div
                 key={i}
                 className="card animate-fade-in"
                 style={{ animationDelay: `${i * 0.15}s`, opacity: 0, textAlign: 'center' }}
               >
-                <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>{feature.icon}</div>
+                <div style={{
+                  fontSize: '1.5rem',
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 900,
+                  marginBottom: '0.75rem',
+                  color: 'var(--accent-primary)',
+                  opacity: 0.4,
+                }}>{feature.icon}</div>
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{feature.title}</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{feature.desc}</p>
               </div>
@@ -158,17 +165,24 @@ export default function Home() {
 
           <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {[
-              { tier: 'Login for a day', pack: 'Silver Pack', badge: 'badge-silver', icon: '🥈' },
-              { tier: '1 Commit', pack: 'Gold Pack', badge: 'badge-gold', icon: '🥇' },
-              { tier: '5 Commits', pack: 'Rare Pack', badge: 'badge-rare', icon: '🔥' },
-              { tier: '15 Commits', pack: 'Ultra Rare Pack', badge: 'badge-ultra-rare', icon: '💎' },
+              { tier: 'Login for a day', pack: 'Silver Pack', badge: 'badge-silver' },
+              { tier: '1 Commit', pack: 'Gold Pack', badge: 'badge-gold' },
+              { tier: '5 Commits', pack: 'Rare Pack', badge: 'badge-rare' },
+              { tier: '15 Commits', pack: 'Ultra Rare Pack', badge: 'badge-ultra-rare' },
             ].map((item, i) => (
               <div
                 key={i}
                 className="achievement-card animate-fade-in"
                 style={{ animationDelay: `${i * 0.15}s`, opacity: 0 }}
               >
-                <div className="achievement-icon">{item.icon}</div>
+                <div className="achievement-icon" style={{ 
+                  fontFamily: 'var(--font-display)', 
+                  fontWeight: 800, 
+                  fontSize: '1.2rem', 
+                  color: 'var(--text-muted)',
+                  width: '40px',
+                  textAlign: 'center',
+                }}>{String(i + 1).padStart(2, '0')}</div>
                 <div className="achievement-info">
                   <div className="achievement-name">{item.tier}</div>
                   <div className="achievement-desc">Earns you a {item.pack}</div>

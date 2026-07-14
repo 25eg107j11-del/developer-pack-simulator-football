@@ -93,7 +93,7 @@ export default function DashboardPage() {
 
       {/* GitHub Stats Grid */}
       <div className="section-header" style={{ textAlign: 'left', marginBottom: 'var(--space-lg)' }}>
-        <h2>Developer <span className="gradient-text">Time Machine</span> 📈</h2>
+        <h2>Developer <span className="gradient-text">Stats</span></h2>
       </div>
 
       <div className="stats-grid" style={{ marginBottom: 'var(--space-2xl)' }}>
@@ -118,7 +118,7 @@ export default function DashboardPage() {
       {stats.topLanguages && stats.topLanguages.length > 0 && (
         <div className="card animate-fade-in animate-delay-2" style={{ marginBottom: 'var(--space-2xl)' }}>
           <h3 style={{ marginBottom: 'var(--space-lg)', fontSize: '1.2rem' }}>
-            🔥 Top Languages
+            Top Languages
           </h3>
           <div style={{ display: 'flex', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
             {stats.topLanguages.map((lang, i) => (
@@ -152,11 +152,11 @@ export default function DashboardPage() {
           style={{ cursor: 'pointer', textAlign: 'center' }}
           onClick={() => router.push('/packs')}
         >
-          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-sm)' }}>📦</div>
+          <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-sm)', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--accent-gold)', opacity: 0.6 }}>01</div>
           <h3 style={{ fontSize: '1.1rem' }}>Open Packs</h3>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
             {totalPacks > 0 ? (
-              <span style={{ color: 'var(--accent-gold)' }}>{totalPacks} packs available!</span>
+              <span style={{ color: 'var(--accent-gold)' }}>{totalPacks} packs available</span>
             ) : (
               'No packs available yet'
             )}
@@ -168,7 +168,7 @@ export default function DashboardPage() {
           style={{ cursor: 'pointer', textAlign: 'center' }}
           onClick={() => router.push('/collection')}
         >
-          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-sm)' }}>🃏</div>
+          <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-sm)', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--accent-primary)', opacity: 0.6 }}>02</div>
           <h3 style={{ fontSize: '1.1rem' }}>My Collection</h3>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
             {uniqueCount} / 58 cards collected
@@ -180,7 +180,7 @@ export default function DashboardPage() {
           style={{ cursor: 'pointer', textAlign: 'center', animationDelay: '0.5s', opacity: 0 }}
           onClick={() => router.push('/achievements')}
         >
-          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-sm)' }}>🏆</div>
+          <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-sm)', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--accent-secondary)', opacity: 0.6 }}>03</div>
           <h3 style={{ fontSize: '1.1rem' }}>Achievements</h3>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
             {unlockedCount} / {achievements.length} unlocked

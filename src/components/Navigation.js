@@ -7,20 +7,29 @@ export default function Navigation() {
   const pathname = usePathname();
 
   const links = [
-    { href: '/', label: 'Home', icon: '🏠' },
-    { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { href: '/packs', label: 'Packs', icon: '📦' },
-    { href: '/collection', label: 'Collection', icon: '🃏' },
-    { href: '/lineup', label: 'Lineup', icon: '📋' },
-    { href: '/achievements', label: 'Achievements', icon: '🏆' },
+    { href: '/', label: 'Home' },
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/packs', label: 'Packs' },
+    { href: '/collection', label: 'Collection' },
+    { href: '/lineup', label: 'Lineup' },
+    { href: '/achievements', label: 'Achievements' },
   ];
 
   return (
     <nav className="nav">
       <div className="nav-inner">
         <Link href="/" className="nav-logo">
-          <span className="nav-logo-icon">⚽</span>
           <span className="gradient-text">DevPack</span>
+          <span style={{
+            fontSize: '0.65rem',
+            fontWeight: 600,
+            color: 'var(--text-muted)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            marginLeft: '0.25rem',
+            alignSelf: 'flex-end',
+            marginBottom: '2px',
+          }}>FC</span>
         </Link>
 
         <ul className="nav-links">
@@ -30,7 +39,7 @@ export default function Navigation() {
                 href={link.href}
                 className={`nav-link ${pathname === link.href ? 'active' : ''}`}
               >
-                {link.icon} {link.label}
+                {link.label}
               </Link>
             </li>
           ))}

@@ -44,19 +44,19 @@ export default function PacksPage() {
   return (
     <div className="container section">
       <div className="section-header">
-        <h1>Pack <span className="gradient-text-gold">Store</span> 📦</h1>
-        <p>Open your earned packs to discover developer cards</p>
+        <h1>Pack <span className="gradient-text-gold">Store</span></h1>
+        <p>Open your earned packs to discover football cards</p>
       </div>
 
       {totalPacks === 0 ? (
         <div className="empty-state animate-fade-in">
-          <div className="empty-state-icon">📦</div>
+          <div className="empty-state-icon" style={{ fontSize: '2rem', opacity: 0.3 }}>—</div>
           <h3 style={{ marginBottom: 'var(--space-sm)' }}>No Packs Available</h3>
           <p style={{ maxWidth: '400px', margin: '0 auto var(--space-lg)', fontSize: '0.9rem' }}>
             Earn packs by unlocking achievements! Connect your GitHub and start coding to earn rewards.
           </p>
           <button className="btn btn-primary" onClick={() => router.push('/achievements')}>
-            View Achievements →
+            View Achievements
           </button>
         </div>
       ) : (
@@ -87,7 +87,7 @@ export default function PacksPage() {
                 </div>
                 {count > 0 && (
                   <button className="btn btn-primary" style={{ marginTop: 'var(--space-sm)' }}>
-                    Open Pack 🎉
+                    Open Pack
                   </button>
                 )}
               </div>

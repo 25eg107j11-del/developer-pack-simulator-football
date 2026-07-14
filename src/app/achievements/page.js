@@ -38,7 +38,7 @@ export default function AchievementsPage() {
   return (
     <div className="container section">
       <div className="section-header">
-        <h1>🏆 <span className="gradient-text-gold">Achievements</span></h1>
+        <h1><span className="gradient-text-gold">Achievements</span></h1>
         <p>{unlocked.length} / {achievements.length} unlocked</p>
       </div>
 
