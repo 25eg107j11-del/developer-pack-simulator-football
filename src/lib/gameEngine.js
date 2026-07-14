@@ -2,12 +2,15 @@
 
 import players, { packTypes, achievements } from '@/data/players';
 
+// Global key – NOT scoped per user so we always know who is logged in
+const GLOBAL_GITHUB_USER_KEY = 'dps_github_user';
+
+// Keys that get prefixed with the username
 const STORAGE_KEYS = {
   COLLECTION: 'dps_collection',
   PACKS: 'dps_packs',
   PACK_HISTORY: 'dps_pack_history',
   ACHIEVEMENTS: 'dps_achievements',
-  GITHUB_USER: 'dps_github_user',
   GITHUB_STATS: 'dps_github_stats',
   FIRST_LOGIN: 'dps_first_login',
   LINEUP: 'dps_lineup',
@@ -15,7 +18,9 @@ const STORAGE_KEYS = {
 };
 
 // ========== STORAGE HELPERS ==========
-function getStorage(key, fallback) {
+
+// Read / write without any prefix (used for the global user key)
+function getRawStorage(key, fallback) {
   if (typeof window === 'undefined') return fallback;
   try {
     const data = localStorage.getItem(key);
@@ -25,9 +30,46 @@ function getStorage(key, fallback) {
   }
 }
 
-function setStorage(key, value) {
+function setRawStorage(key, value) {
   if (typeof window === 'undefined') return;
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+// Get the current user's prefix (e.g. "octocat_")
+function getUserPrefix() {
+  const user = getRawStorage(GLOBAL_GITHUB_USER_KEY, null);
+  return user ? `${user}_` : '';
+}
+
+// User-scoped read / write – all game data goes through these
+function getStorage(key, fallback) {
+  return getRawStorage(getUserPrefix() + key, fallback);
+}
+
+function setStorage(key, value) {
+  setRawStorage(getUserPrefix() + key, value);
+}
+
+// ========== DATA MIGRATION ==========
+// One-time: moves old global data into the new user-scoped keys
+function migrateGlobalDataToUser(username) {
+  if (typeof window === 'undefined') return;
+  const prefix = `${username}_`;
+
+  Object.values(STORAGE_KEYS).forEach(key => {
+    const globalData = localStorage.getItem(key);
+    const userScopedData = localStorage.getItem(prefix + key);
+
+    // Only migrate if global data exists AND the user doesn't already have scoped data
+    if (globalData && !userScopedData) {
+      localStorage.setItem(prefix + key, globalData);
+    }
+  });
+
+  // Clean up old global keys so the next user doesn't inherit them
+  Object.values(STORAGE_KEYS).forEach(key => {
+    localStorage.removeItem(key);
+  });
 }
 
 // ========== COLLECTION ==========
@@ -260,22 +302,29 @@ export function checkAchievements(githubStats) {
 
 // ========== GITHUB STATS ==========
 export function getSavedGitHubUser() {
-  return getStorage(STORAGE_KEYS.GITHUB_USER, null);
+  return getRawStorage(GLOBAL_GITHUB_USER_KEY, null);
 }
 
 export function getSavedGitHubStats() {
+  // Stats are user-scoped, but the user key is global
   return getStorage(STORAGE_KEYS.GITHUB_STATS, null);
 }
 
 export function saveGitHubData(username, stats) {
-  setStorage(STORAGE_KEYS.GITHUB_USER, username);
+  // 1. Save the global "who is logged in" key FIRST so getUserPrefix works
+  setRawStorage(GLOBAL_GITHUB_USER_KEY, username);
+
+  // 2. Migrate any old global data to this user's scoped keys
+  migrateGlobalDataToUser(username);
+
+  // 3. Save stats under the user-scoped key
   setStorage(STORAGE_KEYS.GITHUB_STATS, stats);
 }
 
 export function logout() {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem(STORAGE_KEYS.GITHUB_USER);
-    localStorage.removeItem(STORAGE_KEYS.GITHUB_STATS);
+    // Only remove the global login key – user data stays for next login
+    localStorage.removeItem(GLOBAL_GITHUB_USER_KEY);
   }
 }
 
@@ -348,7 +397,12 @@ function getTopLanguages(repos) {
 
 // ========== RESET ==========
 export function resetAllData() {
+  if (typeof window === 'undefined') return;
+  const prefix = getUserPrefix();
+  // Remove user-scoped data
   Object.values(STORAGE_KEYS).forEach(key => {
-    if (typeof window !== 'undefined') localStorage.removeItem(key);
+    localStorage.removeItem(prefix + key);
   });
+  // Remove global login key
+  localStorage.removeItem(GLOBAL_GITHUB_USER_KEY);
 }

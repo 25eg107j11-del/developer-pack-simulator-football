@@ -9,6 +9,7 @@ import {
   getAvailablePacks,
   getUniqueCards,
   getUnlockedAchievements,
+  saveGitHubData,
 } from '@/lib/gameEngine';
 import { achievements } from '@/data/players';
 
@@ -42,7 +43,7 @@ export default function DashboardPage() {
 
   const simulateCommits = () => {
     const newStats = { ...stats, totalCommits: (stats.totalCommits || 0) + 5 };
-    localStorage.setItem('dps_github_stats', JSON.stringify(newStats));
+    saveGitHubData(newStats.username, newStats);
     checkAchievements(newStats);
     setStats(newStats);
     setPacks(getAvailablePacks());
