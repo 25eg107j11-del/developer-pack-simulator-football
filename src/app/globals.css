@@ -125,27 +125,46 @@ body::before {
 }
 
 @keyframes bgPulse {
-  0% { opacity: 0.6; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* --- Typography --- */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.5rem, 3.5vw, 2.5rem); }
-h3 { font-size: clamp(1.2rem, 2.5vw, 1.75rem); }
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+}
 
 a {
   color: var(--accent-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
+
 a:hover {
   color: var(--accent-secondary);
 }
@@ -210,7 +229,7 @@ a:hover {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -376,6 +395,7 @@ a:hover {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -383,48 +403,108 @@ a:hover {
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 20px var(--accent-primary-glow); }
-  50% { box-shadow: 0 0 40px var(--accent-primary-glow), 0 0 60px var(--accent-primary-glow); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--accent-primary-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 40px var(--accent-primary-glow), 0 0 60px var(--accent-primary-glow);
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-30px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .animate-fade-in {
   animation: fadeInUp 0.6s ease forwards;
 }
 
-.animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
-.animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
-.animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
-.animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
+.animate-delay-1 {
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+.animate-delay-2 {
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.animate-delay-3 {
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.animate-delay-4 {
+  animation-delay: 0.4s;
+  opacity: 0;
+}
 
 /* --- Input Styles --- */
 .input {
@@ -505,19 +585,62 @@ a:hover {
   .pack-grid {
     grid-template-columns: 1fr;
   }
+
+  .collection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .lineup-card-wrapper {
+    transform: scale(0.35) !important;
+  }
+
+  .lineup-empty-slot {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .lineup-remove-btn {
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 60px !important;
+    top: -25px !important;
+    right: -25px !important;
+  }
+}
+
+.lineup-card-wrapper {
+  transform: scale(0.5);
+}
+
+.lineup-empty-slot {
+  width: 60px;
+  height: 60px;
+}
+
+.lineup-remove-btn {
+  width: 50px !important;
+  height: 50px !important;
+  font-size: 35px !important;
+  top: -15px !important;
+  right: -15px !important;
 }
 
 /* --- Scrollbar --- */
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border-glass);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
@@ -696,8 +819,8 @@ a:hover {
 
 /* Texture overlay for Rare Red (Honeycomb) */
 .player-card.rare .player-card-bg {
-  background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px),
-                    radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
   background-position: 0 0, 10px 10px;
   background-size: 20px 20px;
   mix-blend-mode: overlay;
@@ -712,13 +835,11 @@ a:hover {
 
 /* Texture overlay for Ultra-Rare Purple (Carbon-fiber/Diagonal lines) */
 .player-card.ultra-rare .player-card-bg {
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(0,0,0,0.1),
-    rgba(0,0,0,0.1) 4px,
-    rgba(255,255,255,0.05) 4px,
-    rgba(255,255,255,0.05) 8px
-  );
+  background: repeating-linear-gradient(45deg,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.1) 4px,
+      rgba(255, 255, 255, 0.05) 4px,
+      rgba(255, 255, 255, 0.05) 8px);
   mix-blend-mode: soft-light;
   opacity: 0.8;
 }
@@ -737,14 +858,12 @@ a:hover {
   left: -100%;
   width: 50%;
   height: 300%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0.4) 50%,
-    rgba(255, 255, 255, 0.05) 60%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0.05) 60%,
+      transparent 100%);
   transform: rotate(35deg);
   z-index: 4;
   pointer-events: none;
@@ -758,10 +877,23 @@ a:hover {
 }
 
 @keyframes foilSheen {
-  0% { left: -100%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { left: 200%; opacity: 0; }
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 200%;
+    opacity: 0;
+  }
 }
 
 /* Rare+ cards get an animated glow border */
@@ -773,8 +905,15 @@ a:hover {
 }
 
 @keyframes cardGlowPulse {
-  0%, 100% { border-color: rgba(255, 255, 255, 0.15); }
-  50% { border-color: rgba(255, 255, 255, 0.35); }
+
+  0%,
+  100% {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  50% {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
 }
 
 .player-card-rating {
@@ -874,10 +1013,8 @@ a:hover {
   justify-content: center;
   gap: var(--space-md);
   /* Angular pack shape */
-  clip-path: polygon(
-    4% 0%, 96% 0%, 100% 3%, 100% 97%,
-    96% 100%, 4% 100%, 0% 97%, 0% 3%
-  );
+  clip-path: polygon(4% 0%, 96% 0%, 100% 3%, 100% 97%,
+      96% 100%, 4% 100%, 0% 97%, 0% 3%);
 }
 
 /* Foil seam line across the pack */
@@ -888,14 +1025,21 @@ a:hover {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   z-index: 2;
   animation: packSeamGlow 3s ease-in-out infinite;
 }
 
 @keyframes packSeamGlow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Foil light sweep */
@@ -903,13 +1047,11 @@ a:hover {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    110deg,
-    transparent 30%,
-    rgba(255,255,255,0.08) 45%,
-    rgba(255,255,255,0.04) 50%,
-    transparent 60%
-  );
+  background: linear-gradient(110deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.04) 50%,
+      transparent 60%);
   background-size: 250% 100%;
   animation: premiumShimmer 5s ease-in-out infinite;
   z-index: 3;
@@ -922,7 +1064,7 @@ a:hover {
 
 .pack-card.silver-pack {
   background: linear-gradient(160deg, #374151 0%, #4b5563 40%, #6b7280 60%, #374151 100%);
-  border: 1px solid rgba(192,192,192,0.15);
+  border: 1px solid rgba(192, 192, 192, 0.15);
   box-shadow: 0 8px 30px rgba(107, 114, 128, 0.3);
 }
 
@@ -932,7 +1074,7 @@ a:hover {
 
 .pack-card.gold-pack {
   background: linear-gradient(160deg, #78350f 0%, #92400e 30%, #b45309 50%, #78350f 100%);
-  border: 1px solid rgba(255,215,0,0.15);
+  border: 1px solid rgba(255, 215, 0, 0.15);
   box-shadow: 0 8px 30px rgba(180, 83, 9, 0.3);
 }
 
@@ -942,7 +1084,7 @@ a:hover {
 
 .pack-card.rare-pack {
   background: linear-gradient(160deg, #7f1d1d 0%, #991b1b 30%, #b91c1c 50%, #7f1d1d 100%);
-  border: 1px solid rgba(225,112,85,0.15);
+  border: 1px solid rgba(225, 112, 85, 0.15);
   box-shadow: 0 8px 30px rgba(185, 28, 28, 0.3);
 }
 
@@ -952,7 +1094,7 @@ a:hover {
 
 .pack-card.ultra-rare-pack {
   background: linear-gradient(160deg, #581c87 0%, #6b21a8 30%, #7c3aed 50%, #581c87 100%);
-  border: 1px solid rgba(147,51,234,0.2);
+  border: 1px solid rgba(147, 51, 234, 0.2);
   box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
 }
 
@@ -963,7 +1105,7 @@ a:hover {
 .pack-icon {
   font-size: 3.5rem;
   margin-bottom: var(--space-xs);
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
 }
 
 .pack-name {
@@ -1099,20 +1241,25 @@ a:hover {
   transform: translateX(-50%);
   width: 40vw;
   height: 120vh;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0.02) 40%,
-    transparent 70%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 40%,
+      transparent 70%);
   clip-path: polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
   animation: spotlightPulse 3s ease-in-out infinite;
 }
 
 @keyframes spotlightPulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Radiating light rays */
@@ -1124,23 +1271,26 @@ a:hover {
   width: 300vw;
   height: 300vh;
   transform: translate(-50%, -50%);
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    rgba(255, 255, 255, 0.02) 10deg,
-    transparent 20deg,
-    rgba(255, 255, 255, 0.015) 30deg,
-    transparent 40deg,
-    rgba(255, 255, 255, 0.02) 50deg,
-    transparent 60deg
-  );
+  background: conic-gradient(from 0deg,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.02) 10deg,
+      transparent 20deg,
+      rgba(255, 255, 255, 0.015) 30deg,
+      transparent 40deg,
+      rgba(255, 255, 255, 0.02) 50deg,
+      transparent 60deg);
   animation: rotateRays 12s linear infinite;
   pointer-events: none;
 }
 
 @keyframes rotateRays {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .walkout-flare {
@@ -1201,8 +1351,17 @@ a:hover {
 }
 
 @keyframes ratingReveal {
-  from { opacity: 0; transform: scale(2.5); filter: blur(10px); }
-  to { opacity: 1; transform: scale(1); filter: blur(0); }
+  from {
+    opacity: 0;
+    transform: scale(2.5);
+    filter: blur(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
 }
 
 .walkout-name {
@@ -1246,9 +1405,11 @@ a:hover {
     opacity: 0;
     transform: scale(0.5);
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.6;
     transform: scale(2.5);
@@ -1260,6 +1421,7 @@ a:hover {
     opacity: 0;
     transform: translateY(40px) scale(0.85) rotateX(15deg);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1) rotateX(0deg);

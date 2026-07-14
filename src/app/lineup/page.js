@@ -114,10 +114,11 @@ export default function LineupPage() {
               onClick={() => setSelectingSlot(slot)}
             >
               {card ? (
-                <div style={{ position: 'relative', transform: 'scale(0.5)', transformOrigin: 'center center' }}>
+                <div className="lineup-card-wrapper" style={{ position: 'relative', transformOrigin: 'center center' }}>
                    <PlayerCard card={card} size="normal" />
                    <button 
                      onClick={(e) => handleRemovePlayer(slot, e)}
+                     className="lineup-remove-btn"
                      style={{
                        position: 'absolute',
                        top: '-10px',
@@ -139,8 +140,6 @@ export default function LineupPage() {
                 </div>
               ) : (
                 <div style={{
-                  width: '60px',
-                  height: '60px',
                   borderRadius: '50%',
                   backgroundColor: 'rgba(0,0,0,0.5)',
                   border: '2px dashed rgba(255,255,255,0.5)',
@@ -149,11 +148,10 @@ export default function LineupPage() {
                   justifyContent: 'center',
                   color: 'rgba(255,255,255,0.7)',
                   fontWeight: 'bold',
-                  fontSize: '0.9rem',
                   backdropFilter: 'blur(4px)',
                   transition: 'all 0.2s ease',
                 }}
-                className="hover-scale"
+                className="hover-scale lineup-empty-slot"
                 >
                   {slot}
                 </div>

@@ -29,9 +29,9 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
   return (
     <div
       className="player-card-wrapper"
-      style={{ 
-        width: s.width, 
-        height: s.height, 
+      style={{
+        width: s.width,
+        height: s.height,
         cursor: onClick ? 'pointer' : 'default',
         position: 'relative',
       }}
@@ -50,8 +50,8 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
 
       {/* AI Generated 3D Overlay Frame (sits between background and text) */}
       {hasFrame && (
-        <img 
-          src={frameMap[card.rarity]} 
+        <img
+          src={frameMap[card.rarity]}
           alt={`${card.rarity} frame`}
           style={{
             position: 'absolute',
@@ -82,8 +82,8 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem', marginTop: '0.2rem' }}>
             {/* Nation Flag */}
             <div style={{ width: `${1.4 * scale}rem`, height: `${1 * scale}rem`, opacity: 0.9, boxShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
-              <img 
-                src={`https://flagcdn.com/${card.country}.svg`} 
+              <img
+                src={`https://flagcdn.com/${card.country}.svg`}
                 alt={card.country}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
               />
@@ -130,8 +130,8 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
         </div>
 
         {/* Player name */}
-        <div className="player-card-name" style={{ 
-          fontSize: `${0.85 * scale}rem`, 
+        <div className="player-card-name" style={{
+          fontSize: `${0.85 * scale}rem`,
           padding: '0.4rem 0',
           borderTop: '1px solid rgba(255,255,255,0.1)',
           borderBottom: '1px solid rgba(255,255,255,0.1)'
@@ -157,7 +157,7 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
             <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.def}</div>
             <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>DEF</div>
           </div>
-          
+
           {/* Row 2: PAS, DRI, SHO */}
           <div className="player-card-stat">
             <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.pas}</div>
@@ -171,8 +171,8 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
             <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.sho}</div>
             <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>SHO</div>
           </div>
-          </div>
         </div>
       </div>
+    </div>
   );
 }
