@@ -252,7 +252,13 @@ export default function PackOpening({ cards, packType, onClose }) {
             pointerEvents: 'none',
           }} />
 
-          <div className="walkout-country">{bestCard.country}</div>
+          <div className="walkout-country">
+            <img 
+              src={`https://flagcdn.com/${bestCard.country}.svg`} 
+              alt={bestCard.country}
+              style={{ width: '120px', height: '80px', objectFit: 'cover', boxShadow: '0 4px 15px rgba(0,0,0,0.5)', display: 'block' }}
+            />
+          </div>
           <div className="walkout-position">{bestCard.position}</div>
           <div className="walkout-text">WALKOUT</div>
           <div className="walkout-rating" style={{ color: accentColor }}>

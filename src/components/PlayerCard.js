@@ -35,8 +35,12 @@ export default function PlayerCard({ card, size = 'normal', onClick }) {
               {card.position}
             </div>
           </div>
-          <div style={{ fontSize: `${1.4 * scale}rem`, opacity: 0.8, marginTop: '0.2rem' }}>
-            {card.country}
+          <div style={{ width: `${1.4 * scale}rem`, height: `${1 * scale}rem`, opacity: 0.9, marginTop: '0.2rem', boxShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
+            <img 
+              src={`https://flagcdn.com/${card.country}.svg`} 
+              alt={card.country}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
         </div>
 
