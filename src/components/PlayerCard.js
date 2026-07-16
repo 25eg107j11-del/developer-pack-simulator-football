@@ -3,37 +3,34 @@
 import { useState } from 'react';
 import players, { getPlayerImageUrl, getPlayerFallbackUrl } from '@/data/players';
 
+// Map rarity to frame overlay images (only rare+ have frames)
+const frameMap = {
+  rare: '/frames/rare.png',
+  'ultra-rare': '/frames/ultrarare.png',
+  icon: '/frames/icon.png',
+};
+
 export default function PlayerCard({ card: initialCard, size = 'normal', onClick }) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   // Always use the latest data from the master list so old local storage saves 
   // (like old emoji flags) get updated to new formats (like ISO codes).
   const card = players.find(p => p.id === initialCard.id) || initialCard;
+  const hasFrame = !!frameMap[card.rarity];
 
-  const sizeStyles = {
-    small: { width: '160px', height: '230px', fontSize: '0.7' },
-    normal: { width: '220px', height: '320px', fontSize: '1' },
-    large: { width: '280px', height: '400px', fontSize: '1.3' },
-  };
-
-  const s = sizeStyles[size] || sizeStyles.normal;
-  const scale = parseFloat(s.fontSize);
-
-  const hasFrame = ['rare', 'ultra-rare', 'icon'].includes(card.rarity);
-  const frameMap = {
-    'rare': '/frames/rare.png',
-    'ultra-rare': '/frames/ultrarare.png',
-    'icon': '/frames/icon.png',
-  };
+  // Frame padding: the frame PNGs have thick decorative borders (~20-25% of image).
+  // Text content needs to be inset so it sits inside the frame's inner window.
+  const framePadding = hasFrame
+    ? 'calc(2.2rem * var(--card-scale)) calc(1.6rem * var(--card-scale))'
+    : 'calc(0.8rem * var(--card-scale))';
 
   return (
     <div
-      className="player-card-wrapper"
+      className={`player-card-wrapper size-${size}`}
       style={{
-        width: s.width,
-        height: s.height,
         cursor: onClick ? 'pointer' : 'default',
         position: 'relative',
+        overflow: 'hidden',
       }}
       onClick={() => {
         setIsFlipped(!isFlipped);
@@ -55,10 +52,10 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
           alt={`${card.rarity} frame`}
           style={{
             position: 'absolute',
-            inset: '-22%', // Increased outward scale to prevent inner border from squishing text
-            width: '144%',
-            height: '144%',
-            objectFit: 'contain',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'fill',
             pointerEvents: 'none',
             mixBlendMode: 'screen',
             zIndex: 2,
@@ -68,20 +65,20 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
       )}
 
       {/* The Text and Stats Content (sits on top of the frame so it's perfectly readable) */}
-      <div className="player-card-inner" style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none', padding: '0.8rem', display: 'flex', flexDirection: 'column' }}>
+      <div className="player-card-inner" style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none', padding: framePadding, display: 'flex', flexDirection: 'column' }}>
         {/* Top row: Rating + Position | Country */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div className="player-card-rating" style={{ fontSize: `${2.6 * scale}rem` }}>
+            <div className="player-card-rating" style={{ fontSize: `calc(2.6rem * var(--card-scale))` }}>
               {card.rating}
             </div>
-            <div className="player-card-position" style={{ fontSize: `${0.7 * scale}rem` }}>
+            <div className="player-card-position" style={{ fontSize: `calc(0.7rem * var(--card-scale))` }}>
               {card.position}
             </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem', marginTop: '0.2rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 'calc(0.4rem * var(--card-scale))', marginTop: 'calc(0.2rem * var(--card-scale))' }}>
             {/* Nation Flag */}
-            <div style={{ width: `${1.4 * scale}rem`, height: `${1 * scale}rem`, opacity: 0.9, boxShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
+            <div style={{ width: `calc(1.4rem * var(--card-scale))`, height: `calc(1rem * var(--card-scale))`, opacity: 0.9, boxShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
               <img
                 src={`https://flagcdn.com/${card.country}.svg`}
                 alt={card.country}
@@ -90,8 +87,8 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
             </div>
             {/* Club Crest Placeholder */}
             <div style={{
-              width: `${1.2 * scale}rem`,
-              height: `${1.2 * scale}rem`,
+              width: `calc(1.2rem * var(--card-scale))`,
+              height: `calc(1.2rem * var(--card-scale))`,
               borderRadius: '50%',
               background: 'rgba(255, 255, 255, 0.2)',
               border: '1px solid rgba(255, 255, 255, 0.4)',
@@ -114,14 +111,14 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
           width: '100%',
         }}>
           <div style={{
-            width: `${90 * scale}px`,
-            height: `${90 * scale}px`,
+            width: `calc(90px * var(--card-scale))`,
+            height: `calc(90px * var(--card-scale))`,
             borderRadius: '50%',
             background: 'rgba(255, 255, 255, 0.15)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: `${1.8 * scale}rem`,
+            fontSize: `calc(1.8rem * var(--card-scale))`,
             fontWeight: 800,
             border: '2px solid rgba(255, 255, 255, 0.2)',
           }}>
@@ -131,8 +128,8 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
 
         {/* Player name */}
         <div className="player-card-name" style={{
-          fontSize: `${0.85 * scale}rem`,
-          padding: '0.4rem 0',
+          fontSize: `calc(0.85rem * var(--card-scale))`,
+          padding: 'calc(0.4rem * var(--card-scale)) 0',
           borderTop: '1px solid rgba(255,255,255,0.1)',
           borderBottom: '1px solid rgba(255,255,255,0.1)'
         }}>
@@ -141,35 +138,35 @@ export default function PlayerCard({ card: initialCard, size = 'normal', onClick
 
         {/* Minimalist Stats grid */}
         <div className="player-card-stats" style={{
-          padding: '0.4rem 0 0 0',
+          padding: 'calc(0.4rem * var(--card-scale)) 0 0 0',
           gap: '4px',
         }}>
           {/* Row 1: SPD, PHY, DEF */}
           <div className="player-card-stat">
-            <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.spd}</div>
-            <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>SPD</div>
+            <div className="player-card-stat-value" style={{ fontSize: `calc(0.9rem * var(--card-scale))`, fontWeight: 900 }}>{card.stats.spd}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `calc(0.5rem * var(--card-scale))`, color: 'rgba(255,255,255,0.7)' }}>SPD</div>
           </div>
           <div className="player-card-stat">
-            <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.pow}</div>
-            <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>PHY</div>
+            <div className="player-card-stat-value" style={{ fontSize: `calc(0.9rem * var(--card-scale))`, fontWeight: 900 }}>{card.stats.pow}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `calc(0.5rem * var(--card-scale))`, color: 'rgba(255,255,255,0.7)' }}>PHY</div>
           </div>
           <div className="player-card-stat">
-            <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.def}</div>
-            <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>DEF</div>
+            <div className="player-card-stat-value" style={{ fontSize: `calc(0.9rem * var(--card-scale))`, fontWeight: 900 }}>{card.stats.def}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `calc(0.5rem * var(--card-scale))`, color: 'rgba(255,255,255,0.7)' }}>DEF</div>
           </div>
 
           {/* Row 2: PAS, DRI, SHO */}
           <div className="player-card-stat">
-            <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.pas}</div>
-            <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>PAS</div>
+            <div className="player-card-stat-value" style={{ fontSize: `calc(0.9rem * var(--card-scale))`, fontWeight: 900 }}>{card.stats.pas}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `calc(0.5rem * var(--card-scale))`, color: 'rgba(255,255,255,0.7)' }}>PAS</div>
           </div>
           <div className="player-card-stat">
-            <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.dri}</div>
-            <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>DRI</div>
+            <div className="player-card-stat-value" style={{ fontSize: `calc(0.9rem * var(--card-scale))`, fontWeight: 900 }}>{card.stats.dri}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `calc(0.5rem * var(--card-scale))`, color: 'rgba(255,255,255,0.7)' }}>DRI</div>
           </div>
           <div className="player-card-stat">
-            <div className="player-card-stat-value" style={{ fontSize: `${0.9 * scale}rem`, fontWeight: 900 }}>{card.stats.sho}</div>
-            <div className="player-card-stat-label" style={{ fontSize: `${0.5 * scale}rem`, color: 'rgba(255,255,255,0.7)' }}>SHO</div>
+            <div className="player-card-stat-value" style={{ fontSize: `calc(0.9rem * var(--card-scale))`, fontWeight: 900 }}>{card.stats.sho}</div>
+            <div className="player-card-stat-label" style={{ fontSize: `calc(0.5rem * var(--card-scale))`, color: 'rgba(255,255,255,0.7)' }}>SHO</div>
           </div>
         </div>
       </div>

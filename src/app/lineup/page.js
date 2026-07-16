@@ -83,7 +83,6 @@ export default function LineupPage() {
         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 10%, rgba(255,255,255,0.05) 10%, rgba(255,255,255,0.05) 20%)',
         border: '4px solid rgba(255,255,255,0.5)',
         borderRadius: '16px',
-        overflow: 'hidden',
         boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
       }}>
         {/* Pitch Lines */}
@@ -104,32 +103,28 @@ export default function LineupPage() {
                 position: 'absolute',
                 top: position.top,
                 left: position.left,
-                transform: 'translate(-50%, -50%)',
+                width: 0,
+                height: 0,
                 cursor: 'pointer',
-                zIndex: 10,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
               }}
               onClick={() => setSelectingSlot(slot)}
             >
               {card ? (
-                <div className="lineup-card-wrapper" style={{ position: 'relative', transformOrigin: 'center center' }}>
-                   <PlayerCard card={card} size="normal" />
+                <div style={{ position: 'relative' }}>
+                   <PlayerCard card={card} size="pitch" />
                    <button 
                      onClick={(e) => handleRemovePlayer(slot, e)}
                      className="lineup-remove-btn"
                      style={{
                        position: 'absolute',
-                       top: '-10px',
-                       right: '-10px',
                        background: 'var(--accent-rare)',
                        color: 'white',
                        border: 'none',
                        borderRadius: '50%',
-                       width: '30px',
-                       height: '30px',
-                       fontSize: '20px',
                        cursor: 'pointer',
                        zIndex: 20,
                        display: 'flex',
